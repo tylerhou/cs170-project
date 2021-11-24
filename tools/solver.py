@@ -55,7 +55,7 @@ def force_solve(tasks, time):
     profits_to_tasks = defaultdict(list)
     for n in range(len(tasks) + 1):
         for p in permutations(tasks, n):
-            profit = total_profit(p, time, cutoff_profit)
+            profit = total_profit(p, time, linear_decaying_profit)
             profits_to_tasks[profit].append(p)
     return profits_to_tasks
 
@@ -65,14 +65,18 @@ def greedy_profit_solve(tasks):
 def greedy_deadline_solve(tasks):
     return sorted(tasks, key=lambda t: t.deadline)
 
-tasks = [
-    Task(1, 30, 30, 10),
-    Task(2, 30, 31, 20),
-]
-print(total_profit(greedy_profit_solve(tasks), 100, linear_decaying_profit))
-print(total_profit(greedy_deadline_solve(tasks), 100, linear_decaying_profit))
+def main():
+    tasks = [
+        Task(1, 30, 30, 10),
+        Task(2, 30, 31, 20),
+    ]
+    print(total_profit(greedy_profit_solve(tasks), 100, linear_decaying_profit))
+    print(total_profit(greedy_deadline_solve(tasks), 100, linear_decaying_profit))
 
-# for profit, tasks in sorted(force_solve(tasks, time=100).items()):
-#     print(profit)
-#     for task in tasks:
-#         print("\t", task)
+    # for profit, tasks in sorted(force_solve(tasks, time=100).items()):
+    #     print(profit)
+    #     for task in tasks:
+    #         print("\t", task)
+
+if __name__ == "__main__":
+    main()
