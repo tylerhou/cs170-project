@@ -4,4 +4,6 @@
 .*.swp
 *~
 
+compile_commands.json
 /bazel-*
+.cache
