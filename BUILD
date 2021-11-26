@@ -34,6 +34,19 @@ cc_library(
 )
 
 cc_library(
+    name = "schedule",
+    srcs = [
+        "schedule.cc",
+        "schedule.h",
+    ],
+    deps = [
+        ":constants",
+        ":problem",
+        ":task",
+    ],
+)
+
+cc_library(
     name = "constants",
     srcs = [
         "constants.h",
@@ -64,6 +77,7 @@ cc_binary(
     name = "schedule_test",
     srcs = ["schedule_test.cc"],
     deps = [
+        ":parse",
         ":schedule",
         "@com_google_googletest//:gtest_main",
     ],
