@@ -5,8 +5,8 @@
 
 class Task {
 public:
-  Task(int index, int deadline, int duration, float profit)
-      : index(index), deadline(deadline), duration(duration), profit(profit) {}
+  Task(int deadline, int duration, float profit)
+      : deadline(deadline), duration(duration), profit(profit) {}
 
   Task() = default;
 
