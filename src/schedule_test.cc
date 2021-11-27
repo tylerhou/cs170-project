@@ -31,9 +31,9 @@ TEST(Schedule, PushBack) {
 
   EXPECT_EQ(schedule.selections(),
             std::vector<Selection>({
-                Selection{.task_index = 0, .end_time = 50},
-                Selection{.task_index = 1, .end_time = 60},
-                Selection{.task_index = 2, .end_time = 110},
+                Selection{.task_index = 0},
+                Selection{.task_index = 1},
+                Selection{.task_index = 2},
             }));
 }
 
@@ -57,8 +57,8 @@ TEST(Schedule, PopBack) {
   EXPECT_EQ(schedule.selected_profit(), 125);
   EXPECT_EQ(schedule.selections(),
             std::vector<Selection>({
-                Selection{.task_index = 0, .end_time = 50},
-                Selection{.task_index = 1, .end_time = 60},
+                Selection{.task_index = 0},
+                Selection{.task_index = 1},
             }));
 }
 
@@ -81,9 +81,9 @@ TEST(Schedule, Insert) {
   EXPECT_EQ(schedule.selected_profit(), 175);
   EXPECT_EQ(schedule.selections(),
             std::vector<Selection>({
-                Selection{.task_index = 0, .end_time = 50},
-                Selection{.task_index = 2, .end_time = 100},
-                Selection{.task_index = 1, .end_time = 110},
+                Selection{.task_index = 0},
+                Selection{.task_index = 2},
+                Selection{.task_index = 1},
             }));
 }
 
@@ -106,9 +106,9 @@ TEST(Schedule, Remove) {
   EXPECT_EQ(schedule.selected_profit(), 175);
   EXPECT_EQ(schedule.selections(),
             std::vector<Selection>({
-                Selection{.task_index = 0, .end_time = 50},
-                Selection{.task_index = 2, .end_time = 100},
-                Selection{.task_index = 1, .end_time = 110},
+                Selection{.task_index = 0},
+                Selection{.task_index = 2},
+                Selection{.task_index = 1},
             }));
 }
 
@@ -132,8 +132,8 @@ TEST(Schedule, Swap) {
   EXPECT_DOUBLE_EQ(schedule.selected_profit(), 50 + 80 + 4.9406065819802);
   EXPECT_EQ(schedule.selections(),
             std::vector<Selection>({
-                Selection{.task_index = 2, .end_time = 50},
-                Selection{.task_index = 3, .end_time = 350},
-                Selection{.task_index = 1, .end_time = 360},
+                Selection{.task_index = 2},
+                Selection{.task_index = 3},
+                Selection{.task_index = 1},
             }));
 }

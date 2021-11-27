@@ -38,29 +38,22 @@ public:
 
   struct Selection {
     int task_index; // Index of the selected task in the tasks_ vector.
-    int end_time;   // Current end time for this selected task.
   };
   const std::vector<Selection> &selections() const { return selections_; }
 
 private:
-  // Shifts the selected task by shift time.
-  // If the new completion time is before 0 or after the end of the day,
-  // changes the profit yielded for the task to 0.
-  void shift_selected_task(int selected_task_index, int shift);
-
   // Trims tasks that end after the day ends.
   void trim_selected_suffix();
-  // Trims tasks that end before the day begins.
-  void trim_selected_prefix();
 
   const Problem &problem_;
 
   std::vector<Selection> selections_;
+  int total_duration_ = 0;
 };
 
 inline bool operator==(const Schedule::Selection &lhs,
                        const Schedule::Selection &rhs) {
-  return lhs.task_index == rhs.task_index && lhs.end_time == rhs.end_time;
+  return lhs.task_index == rhs.task_index;
 }
 
 #endif

@@ -4,45 +4,20 @@
 #include "constants.h"
 #include "schedule.h"
 
-void Schedule::shift_selected_task(int selected_task_index, int shift) {
-  auto &selection = selections_[selected_task_index];
-  const int old_end_time = selection.end_time;
-  const int new_end_time = old_end_time + shift;
-  selection.end_time = new_end_time;
-}
-
 void Schedule::trim_selected_suffix() {
-  auto it = selections_.end() - 1;
-  while (it != selections_.begin() && !(it->end_time < kEndTimesSize)) {
-    --it;
+  while (selections_.size() > 0 && total_duration_ > kDayLength) {
+    const auto task = problem_.tasks()[selections_.back().task_index];
+    total_duration_ -= task.duration;
+    selections_.pop_back();
   }
-  selections_.erase(it + 1, selections_.end());
-}
-
-void Schedule::trim_selected_prefix() {
-  auto it = selections_.begin();
-  while (it != selections_.end() && !(it->end_time >= 0)) {
-    ++it;
-  }
-  selections_.erase(selections_.begin(), it);
 }
 
 void Schedule::insert(int position, int task_index) {
-  const auto task_to_insert = problem_.tasks()[task_index];
-
-  for (int i = position; i < selections_.size(); ++i) {
-    shift_selected_task(i, task_to_insert.duration);
-  }
-
-  int end_time = task_to_insert.duration;
-  if (position > 0) {
-    end_time += selections_[position - 1].end_time;
-  }
+  const auto task = problem_.tasks()[task_index];
   selections_.insert(selections_.begin() + position,
-                     Selection{.task_index = task_index, .end_time = end_time});
-
+                     Selection{.task_index = task_index});
+  total_duration_ += task.duration;
   trim_selected_suffix();
-  trim_selected_prefix();
 }
 
 void Schedule::push_back(int task_index) {
@@ -51,11 +26,9 @@ void Schedule::push_back(int task_index) {
 
 void Schedule::remove(int position) {
   const auto selection = selections_[position];
-  const auto task_to_remove = problem_.tasks()[selection.task_index];
-  for (int i = position + 1; i < selections_.size(); ++i) {
-    shift_selected_task(i, -task_to_remove.duration);
-  }
+  const auto task = problem_.tasks()[selection.task_index];
   selections_.erase(selections_.begin() + position);
+  total_duration_ -= task.duration;
 }
 
 void Schedule::pop_back() { Schedule::remove(selections_.size() - 1); }
@@ -80,9 +53,11 @@ void Schedule::swap_tasks(int first_pos, int second_pos) {
 
 double Schedule::selected_profit() const {
   double profit = 0;
+  int end_time = 0;
   for (const auto selection : selections_) {
-    profit +=
-        problem_.profit_for_task(selection.task_index, selection.end_time);
+    const auto task = problem_.tasks()[selection.task_index];
+    end_time += task.duration;
+    profit += problem_.profit_for_task(selection.task_index, end_time);
   }
   return profit;
 }
