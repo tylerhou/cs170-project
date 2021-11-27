@@ -137,3 +137,35 @@ TEST(Schedule, Swap) {
                 Selection{.task_index = 1},
             }));
 }
+
+TEST(Schedule, Copy) {
+  std::string input = R"(5
+1 100 50 50
+2 200 10 75
+3 100 50 50
+4 400 300 80)";
+  std::stringstream in(input);
+  std::vector<Task> tasks = ParseInput(in);
+
+  Problem problem{tasks};
+  Schedule schedule{problem};
+
+  schedule.push_back(0);
+  schedule.push_back(1);
+
+  Schedule schedule_copy{schedule};
+  schedule.pop_back();
+
+  EXPECT_EQ(schedule_copy.selected_profit(), 125);
+  EXPECT_EQ(schedule_copy.selections(),
+            std::vector<Selection>({
+                Selection{.task_index = 0},
+                Selection{.task_index = 1},
+            }));
+
+  EXPECT_EQ(schedule.selected_profit(), 50);
+  EXPECT_EQ(schedule.selections(),
+            std::vector<Selection>({
+                Selection{.task_index = 0},
+            }));
+}
