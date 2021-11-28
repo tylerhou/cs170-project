@@ -43,6 +43,8 @@ cc_library(
         ":constants",
         ":problem",
         ":task",
+        "@com_google_absl//absl/status:status",
+        "@com_google_absl//absl/types:span",
     ],
 )
 
@@ -79,6 +81,8 @@ cc_binary(
     deps = [
         ":parse",
         ":schedule",
+        "@com_google_absl//absl/status:status",
         "@com_google_googletest//:gtest_main",
+        "@com_google_absl//absl/types:span",
     ],
 )
