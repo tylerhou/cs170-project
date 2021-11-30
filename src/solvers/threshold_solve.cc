@@ -10,8 +10,13 @@
 #include "src/solvers/sequence.h"
 #include "src/solvers/threshold.h"
 
+constexpr auto kIterations = 10;
+
 int main() {
   Problem problem{ParseInput(std::cin)};
+  if (problem.tasks().empty()) {
+      return 0;
+  }
   std::random_device rd;
   std::mt19937 g(rd());
   LinearSequence sequence{-200, 0, 0.01, 100};
@@ -25,15 +30,9 @@ int main() {
 
   double max_profit = 0;
   Schedule max_schedule{problem};
-  constexpr auto n = 100;
-  for (int i = 0; i < n; ++i) {
+  for (int i = 0; i < kIterations; ++i) {
     Schedule initial{problem};
-    std::vector<int> shuffled = initial.selections();
-    std::shuffle(shuffled.begin(), shuffled.end(), g);
-    auto status = initial.set_selections(shuffled);
-    if (!status.ok()) {
-      return 1;
-    }
+    initial.shuffle(g);
     auto result = solver.Run(initial);
     auto profit = result.selected_profit();
     if (profit > max_profit) {
