@@ -2,8 +2,8 @@
 
 #include "gtest/gtest.h"
 
-#include "parse.h"
-#include "task.h"
+#include "src/parse.h"
+#include "src/task.h"
 
 TEST(ParseInput, Parse) {
   std::cout << "In test";

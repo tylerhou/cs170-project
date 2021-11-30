@@ -1,4 +1,4 @@
-#include "task.h"
+#include "src/task.h"
 
 std::istream& operator>>(std::istream& in, Task& task) {
     int index;

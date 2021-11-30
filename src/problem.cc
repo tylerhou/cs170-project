@@ -1,4 +1,4 @@
-#include "problem.h"
+#include "src/problem.h"
 
 std::array<double, Problem::EndTimesSize> decay_per_minutes_late() {
   std::array<double, Problem::EndTimesSize> decays;

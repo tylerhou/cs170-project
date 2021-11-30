@@ -3,8 +3,8 @@
 
 #include "glog/logging.h"
 
-#include "constants.h"
-#include "schedule.h"
+#include "src/constants.h"
+#include "src/schedule.h"
 
 // Swaps the two tasks at the selected indexes.
 void Schedule::swap_tasks(int first_pos, int second_pos) {

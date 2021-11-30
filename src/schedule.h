@@ -1,5 +1,5 @@
-#ifndef SCHEDULE_H_
-#define SCHEDULE_H_
+#ifndef SRC_SCHEDULE_H_
+#define SRC_SCHEDULE_H_
 
 #include <algorithm>
 #include <array>
@@ -8,9 +8,9 @@
 #include "absl/status/status.h"
 #include "absl/types/span.h"
 
-#include "constants.h"
-#include "problem.h"
-#include "task.h"
+#include "src/constants.h"
+#include "src/problem.h"
+#include "src/task.h"
 
 class Schedule {
 public:

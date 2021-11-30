@@ -2,8 +2,8 @@
 
 #include "gtest/gtest.h"
 
-#include "problem.h"
-#include "parse.h"
+#include "src/problem.h"
+#include "src/parse.h"
 
 TEST(Problem, ProfitForTask) {
   std::string input = R"(5

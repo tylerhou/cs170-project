@@ -3,9 +3,9 @@
 #include "absl/types/span.h"
 #include "gtest/gtest.h"
 
-#include "parse.h"
-#include "problem.h"
-#include "schedule.h"
+#include "src/parse.h"
+#include "src/problem.h"
+#include "src/schedule.h"
 
 TEST(Schedule, Swap) {
   std::string input = R"(5

@@ -1,11 +1,11 @@
-#ifndef PROBLEM_H_
-#define PROBLEM_H_
+#ifndef SRC_PROBLEM_H_
+#define SRC_PROBLEM_H_
 
 #include <array>
 #include <vector>
 
-#include "constants.h"
-#include "task.h"
+#include "src/constants.h"
+#include "src/task.h"
 
 class Problem {
 public:

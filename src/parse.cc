@@ -1,4 +1,4 @@
-#include "parse.h"
+#include "src/parse.h"
 
 std::vector<Task> ParseInput(std::istream &in) {
     std::vector<Task> tasks;
