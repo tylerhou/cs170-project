@@ -11,6 +11,7 @@ tasks = [
     Task(5, 25, 100, 15),
 ]
 
+
 def total_profit(tasks, max_time, profit_fn):
     time = profit = 0
     for t in tasks:
@@ -19,6 +20,7 @@ def total_profit(tasks, max_time, profit_fn):
             break
         profit += profit_fn(time, t)
     return profit
+
 
 def linear_decaying_profit(time, task):
     """Computes linearly decaying profit.
@@ -34,6 +36,7 @@ def linear_decaying_profit(time, task):
     """
     s = max(0, time - task.deadline)
     return max(0, task.profit - s)
+
 
 def cutoff_profit(time, task):
     """Only receive profit if the task is completed before the deadline.
@@ -51,6 +54,7 @@ def cutoff_profit(time, task):
         return task.profit
     return 0
 
+
 def force_solve(tasks, time):
     profits_to_tasks = defaultdict(list)
     for n in range(len(tasks) + 1):
@@ -59,11 +63,14 @@ def force_solve(tasks, time):
             profits_to_tasks[profit].append(p)
     return profits_to_tasks
 
+
 def greedy_profit_solve(tasks):
     return sorted(tasks, key=lambda t: t.profit, reverse=True)
 
+
 def greedy_deadline_solve(tasks):
     return sorted(tasks, key=lambda t: t.deadline)
+
 
 def main():
     tasks = [
@@ -77,6 +84,7 @@ def main():
     #     print(profit)
     #     for task in tasks:
     #         print("\t", task)
+
 
 if __name__ == "__main__":
     main()

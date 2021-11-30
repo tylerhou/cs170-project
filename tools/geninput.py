@@ -5,6 +5,8 @@ from solver import Task
 
 
 DEADLINE = 1440
+
+
 def generate_random(n):
     for i in range(1, n+1):
         t = random.randint(0, DEADLINE)
@@ -53,7 +55,9 @@ def print_tasks(tasks, out=sys.stdout):
     tasks = list(tasks)
     print(len(tasks), file=out)
     for i, task in enumerate(tasks):
-        print(i+1, task.deadline, task.duration, "{:.3f}".format(task.profit), file=out)
+        print(i+1, task.deadline, task.duration,
+              "{:.3f}".format(task.profit), file=out)
+
 
 def reindex_tasks(tasks):
     for i, task in enumerate(tasks):
@@ -63,7 +67,8 @@ def reindex_tasks(tasks):
 if __name__ == "__main__":
     solution_length = int(sys.argv[1])
     random_length = int(sys.argv[2])
-    tasks = list(wiggle_deadlines(generate_solution(solution_length, DEADLINE)))
+    tasks = list(wiggle_deadlines(
+        generate_solution(solution_length, DEADLINE)))
     tasks += list(generate_random(random_length))
     tasks = list(reindex_tasks(tasks))
     random.shuffle(tasks)
