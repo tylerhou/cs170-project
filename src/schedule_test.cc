@@ -19,8 +19,7 @@ TEST(Schedule, Swap) {
   Problem problem{tasks};
   Schedule schedule{problem};
 
-  EXPECT_TRUE(
-      schedule.set_selections(absl::Span<const int>({3, 2, 1, 0})).ok());
+  schedule.set_selections(absl::Span<const int>({3, 2, 1, 0}));
   schedule.swap_tasks(0, 1);
 
   const double profit = 50 + 80 + 4.9406065819802 + 0.2571805286515;

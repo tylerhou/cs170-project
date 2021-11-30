@@ -1,6 +1,7 @@
 #ifndef SCHEDULE_H_
 #define SCHEDULE_H_
 
+#include <algorithm>
 #include <array>
 #include <vector>
 
@@ -35,15 +36,12 @@ public:
 
   const Problem &problem() const { return *problem_; }
 
-  absl::Status set_selections(absl::Span<const int> selections) {
-    if (selections.size() != problem().tasks().size()) {
-      return absl::InvalidArgumentError("wrong selections size");
-    }
-    selections_.resize(problem().tasks().size());
-    std::copy(selections.begin(), selections.end(), selections_.begin());
-    return absl::OkStatus();
-  }
+  void set_selections(absl::Span<const int> selections);
   const std::vector<int> &selections() const { return selections_; }
+
+  template <typename RandomGen> void shuffle(RandomGen &g) {
+    std::shuffle(selections_.begin(), selections_.end(), g);
+  }
 
 private:
   const Problem *problem_;
