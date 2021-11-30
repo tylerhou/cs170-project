@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include <array>
+#include <random>
 #include <vector>
 
 #include "absl/status/status.h"
@@ -34,13 +35,28 @@ public:
   // Linear time is fine as we must make a copy to compute the neightbor cost.
   double selected_profit() const;
 
+  // Returns an iterator into selections that points to the first uncompleted
+  // (i.e. the first task that ends after the deadline).  If we complete all
+  // tasks, then the return value is equal to selections().end()
+  std::vector<int>::const_iterator first_uncompleted_task() const;
+  int completed_tasks_size() const;
+
   const Problem &problem() const { return *problem_; }
 
   void set_selections(absl::Span<const int> selections);
   const std::vector<int> &selections() const { return selections_; }
 
+  // Mutates the schedule by randomly shuffling all selections.
   template <typename RandomGen> void shuffle(RandomGen &g) {
     std::shuffle(selections_.begin(), selections_.end(), g);
+  }
+  // Mutates the schedule to a random neighbor.
+  template <typename RandomGen> void permute(RandomGen &g) {
+    std::uniform_int_distribution<> first_dist(0, completed_tasks_size() - 1),
+        second_dist(0, problem_->tasks().size() - 1);
+    auto first = first_dist(g);
+    auto second = second_dist(g);
+    swap_tasks(first, second);
   }
 
 private:

@@ -3,24 +3,86 @@
 
 #include <vector>
 
-class LinearSequence {
+#include "src/schedule.h"
+
+class Sequence {
+public:
+  Sequence() = default;
+  virtual ~Sequence() = default;
+
+  virtual int size() const = 0;
+  virtual std::vector<double>::const_iterator begin() const = 0;
+  virtual std::vector<double>::const_iterator end() const = 0;
+};
+
+class LinearSequence : public Sequence {
 public:
   // Unfortunately, writing an iterator is annoying, so we fill a vector.
   // This uses more memory and might be slower, but whatever.
-  LinearSequence(double start, double stop, double step, int quench) {
-    sequence_.reserve((stop - start) / step + quench + 1);
+  LinearSequence(double start, double stop, double step) {
+    sequence_.reserve((stop - start) / step + 1);
     while (start < stop) {
       sequence_.push_back(start);
       start += step;
     }
-    for (int i = 0; i < quench; ++i) {
-        sequence_.push_back(0);
+  }
+
+  int size() const { return sequence_.size(); }
+  std::vector<double>::const_iterator begin() const {
+    return sequence_.begin();
+  }
+  std::vector<double>::const_iterator end() const { return sequence_.end(); }
+
+  std::vector<double> sequence_;
+};
+
+class ConstantSequence : public Sequence {
+public:
+  // Unfortunately, writing an iterator is annoying, so we fill a vector.
+  // This uses more memory and might be slower, but whatever.
+  ConstantSequence(int constant, int size) {
+    sequence_.reserve(size);
+    for (int i = 0; i < size; ++i) {
+      sequence_.push_back(constant);
     }
   }
 
-  const auto begin() const { return sequence_.begin(); }
-  const auto end() const { return sequence_.end(); }
+  int size() const { return sequence_.size(); }
+  std::vector<double>::const_iterator begin() const {
+    return sequence_.begin();
+  }
+  std::vector<double>::const_iterator end() const { return sequence_.end(); }
 
+  std::vector<double> sequence_;
+};
+
+// Creates a threshold sequence by generating random schedules and selecting a
+// neighbor. Computes the delta in cost, and adds that delta as a threshold.
+class SampledSequence : public Sequence {
+public:
+  template <typename RandomGen>
+  SampledSequence(const Problem &problem, int size, RandomGen &g)
+      : problem_(problem) {
+    Schedule schedule{problem_};
+    for (int i = 0; i < size; ++i) {
+      schedule.shuffle(g);
+      Schedule neighbor{schedule};
+      neighbor.permute(g);
+      auto difference =
+          std::fabs(schedule.selected_profit() - neighbor.selected_profit());
+      sequence_.push_back(difference);
+    }
+    std::sort(sequence_.rbegin(), sequence_.rend());
+  }
+
+  int size() const { return sequence_.size(); }
+  std::vector<double>::const_iterator begin() const {
+    return sequence_.begin();
+  }
+  std::vector<double>::const_iterator end() const { return sequence_.end(); }
+
+private:
+  const Problem &problem_;
   std::vector<double> sequence_;
 };
 

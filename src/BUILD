@@ -47,9 +47,9 @@ cc_library(
         ":constants",
         ":problem",
         ":task",
+        "@com_github_google_glog//:glog",
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/types:span",
-        "@com_github_google_glog//:glog",
     ],
 )
 

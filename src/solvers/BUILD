@@ -36,4 +36,7 @@ cc_library(
         "sequence.cc",
         "sequence.h",
     ],
+    deps = [
+        "//src:schedule",
+    ],
 )
