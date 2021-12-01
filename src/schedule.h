@@ -35,6 +35,8 @@ public:
   // Linear time is fine as we must make a copy to compute the neightbor cost.
   double selected_profit() const;
 
+  std::vector<int>::const_iterator begin() const { return selections().begin(); };
+  std::vector<int>::const_iterator end() const { return selections().end(); };
   // Returns an iterator into selections that points to the first uncompleted
   // (i.e. the first task that ends after the deadline).  If we complete all
   // tasks, then the return value is equal to selections().end()

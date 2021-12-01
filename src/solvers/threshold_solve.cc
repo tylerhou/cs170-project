@@ -15,10 +15,10 @@
 #include "src/solvers/threshold.h"
 
 constexpr auto kIterations = 100;
-constexpr auto kSampleSequenceSize = 1000000;
+constexpr auto kSampleSequenceSize = 1000 * 1000;
 
 int main(int argc, char *argv[]) {
-  /* google::InitGoogleLogging(argv[0]); */
+  google::InitGoogleLogging(argv[0]);
   Problem problem{ParseInput(std::cin)};
   if (problem.tasks().empty()) {
     return 0;
@@ -33,8 +33,8 @@ int main(int argc, char *argv[]) {
             << (end - start) / std::chrono::seconds(1) << " seconds";
   ThresholdImpl<std::mt19937, 2> solver{problem, &sequence, g};
 
-  ConstantSequence quench_sequence(/*constant=*/0, /*size=*/1000);
-  ThresholdImpl<std::mt19937, 32> quencher{problem, &quench_sequence, g};
+  ConstantSequence quench_sequence(/*constant=*/0, /*size=*/10000);
+  ThresholdImpl<std::mt19937, 8> quencher{problem, &quench_sequence, g};
 
   double max_profit = 0;
   Schedule max_schedule{problem};
@@ -58,7 +58,9 @@ int main(int argc, char *argv[]) {
       max_schedule = result;
     }
   }
-  for (const auto selection : max_schedule.selections()) {
-    std::cout << selection << "\n";
+  for (auto it = max_schedule.begin();
+       it != max_schedule.first_uncompleted_task(); ++it) {
+    // Selections are 1-indexed.
+    std::cout << *it + 1 << "\n";
   }
 }
