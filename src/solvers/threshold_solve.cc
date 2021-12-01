@@ -60,9 +60,8 @@ int main(int argc, char *argv[]) {
       max_schedule = result;
     }
   }
-  for (auto it = max_schedule.begin();
-       it != max_schedule.first_uncompleted_task(); ++it) {
+  for (const auto selection : max_schedule) {
     // Selections are 1-indexed.
-    std::cout << *it + 1 << "\n";
+    std::cout << selection + 1 << "\n";
   }
 }
