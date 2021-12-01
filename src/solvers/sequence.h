@@ -58,6 +58,7 @@ public:
 
 // Creates a threshold sequence by generating random schedules and selecting a
 // neighbor. Computes the delta in cost, and adds that delta as a threshold.
+// See: http://comisef.wikidot.com/tutorial:tathresholds
 class SampledSequence : public Sequence {
 public:
   template <typename RandomGen>
@@ -66,10 +67,10 @@ public:
     Schedule schedule{problem_};
     for (int i = 0; i < size; ++i) {
       schedule.shuffle(g);
-      Schedule neighbor{schedule};
-      neighbor.permute(g);
-      auto difference =
-          std::fabs(schedule.selected_profit() - neighbor.selected_profit());
+      const auto schedule_profit = schedule.selected_profit();
+      schedule.permute(g);
+      const auto difference =
+          std::fabs(schedule_profit - schedule.selected_profit());
       sequence_.push_back(difference);
     }
     std::sort(sequence_.rbegin(), sequence_.rend());

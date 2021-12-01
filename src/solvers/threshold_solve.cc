@@ -7,6 +7,7 @@
 #include <random>
 #include <vector>
 
+#include "gflags/gflags.h"
 #include "glog/logging.h"
 
 #include "src/parse.h"
@@ -14,10 +15,11 @@
 #include "src/solvers/sequence.h"
 #include "src/solvers/threshold.h"
 
-constexpr auto kIterations = 100;
-constexpr auto kSampleSequenceSize = 1000 * 1000;
+constexpr auto kIterations = 500;
+constexpr auto kSampleSequenceSize = 100 * 1000;
 
 int main(int argc, char *argv[]) {
+  gflags::ParseCommandLineFlags(&argc, &argv, true);
   google::InitGoogleLogging(argv[0]);
   Problem problem{ParseInput(std::cin)};
   if (problem.tasks().empty()) {
@@ -31,7 +33,7 @@ int main(int argc, char *argv[]) {
   auto end = std::chrono::high_resolution_clock::now();
   LOG(INFO) << "Generated " << kSampleSequenceSize << " thresholds in "
             << (end - start) / std::chrono::seconds(1) << " seconds";
-  ThresholdImpl<std::mt19937, 2> solver{problem, &sequence, g};
+  ThresholdImpl<std::mt19937, 1> solver{problem, &sequence, g};
 
   ConstantSequence quench_sequence(/*constant=*/0, /*size=*/10000);
   ThresholdImpl<std::mt19937, 8> quencher{problem, &quench_sequence, g};
