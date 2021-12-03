@@ -6,11 +6,12 @@ import os.path
 import parse
 from collections import defaultdict
 
-def traverse(root):
+def traverse(root, suffix):
     for size_dir in os.listdir(root):
         for file in os.listdir(os.path.join(root, size_dir)):
-            file = file.removesuffix(".in")
-            file = file.removesuffix(".out")
+            if not file.endswith(suffix):
+                continue
+            file = file.removesuffix(suffix)
             yield (size_dir, file)
 
 
@@ -46,7 +47,7 @@ def selection_prefix(tasks, selections, offset=1):
 
 def main(inputs, roots, output):
     parsed_inputs = {}
-    for size, file in traverse(inputs):
+    for size, file in traverse(inputs, '.in'):
         key = (size, file)
         parsed_inputs[key] = parse.read_input_file(
             os.path.join(inputs, size, file + ".in"))
@@ -54,7 +55,7 @@ def main(inputs, roots, output):
     max_profit = defaultdict(int)
     max_selections = {}
     for root in roots:
-        for size, file in traverse(root):
+        for size, file in traverse(root, '.out'):
             key = (size, file)
             tasks = parsed_inputs[key]
             selections = parse.read_output_file(
