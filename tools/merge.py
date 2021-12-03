@@ -15,12 +15,14 @@ def traverse(root):
 
 
 MAX_TIME = 1440
-def compute_profit(tasks, selections):
+def compute_profit(tasks, selections, offset=1):
     # selections has 1-indexes
     profit = 0
     time = 0
     for index in selections:
-        task = tasks[index-1]
+        if not (0 <= index - offset < len(tasks)):
+            return 0
+        task = tasks[index-offset]
         time += task.duration
         if time > MAX_TIME:
             break
@@ -28,11 +30,13 @@ def compute_profit(tasks, selections):
     return profit
 
 
-def selection_prefix(tasks, selections):
+def selection_prefix(tasks, selections, offset=1):
     time = 0
     prefix = []
     for index in selections:
-        task = tasks[index-1]
+        if not (0 <= index - offset < len(tasks)):
+            return []
+        task = tasks[index-offset]
         time += task.duration
         if time > MAX_TIME:
             break
@@ -55,10 +59,16 @@ def main(inputs, roots, output):
             tasks = parsed_inputs[key]
             selections = parse.read_output_file(
                 os.path.join(root, size, file + ".out"))
-            profit = compute_profit(tasks, selections)
-            if profit > max_profit[key]:
-                max_profit[key] = profit
-                max_selections[key] = selections
+            max_offset = -1
+            for offset in (0, 1):
+                profit = compute_profit(tasks, selections, offset)
+                if profit > max_profit[key]:
+                    max_profit[key] = profit
+                    max_selections[key] = selections
+                    max_offset = offset
+            if max_offset == 0:
+                for i, _ in enumerate(selections):
+                    selections[i] += 1
 
     for (size, file) in max_selections:
         key = (size, file)
