@@ -15,8 +15,8 @@
 #include "src/solvers/sequence.h"
 #include "src/solvers/threshold.h"
 
-constexpr auto kIterations = 500;
-constexpr auto kSampleSequenceSize = 100 * 1000;
+constexpr auto kIterations = 3000;
+constexpr auto kSampleSequenceSize = 300 * 1000;
 
 int main(int argc, char *argv[]) {
   gflags::ParseCommandLineFlags(&argc, &argv, true);
