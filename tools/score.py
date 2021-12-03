@@ -31,7 +31,7 @@ def compute_profit(tasks, selections, offset=1):
 
 
 from collections import namedtuple
-Result = namedtuple("Result", ["profit", "root"], defaults=[0, ""])
+Result = namedtuple("Result", ["profit", "roots"], defaults=[0, []])
 
 def main(inputs, roots):
     parsed_inputs = {}
@@ -50,12 +50,12 @@ def main(inputs, roots):
             max_offset = -1
             for offset in (0, 1):
                 profit = compute_profit(tasks, selections, offset)
-                if profit >= max_profit[key].profit:
-                    max_profit[key] = Result(profit=profit, root=root)
+                if profit == max_profit[key].profit:
+                    max_profit[key].roots.append(root)
                     max_offset = offset
-            if max_offset == 0:
-                for i, _ in enumerate(selections):
-                    selections[i] += 1
+                if profit > max_profit[key].profit:
+                    max_profit[key] = Result(profit=profit, roots=[root])
+                    max_offset = offset
 
     for key, profit in max_profit.items():
         print(key, profit)
