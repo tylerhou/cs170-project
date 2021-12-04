@@ -39,7 +39,15 @@ int main(int argc, char *argv[]) {
   ConstantSequence quench_sequence(/*constant=*/0, /*size=*/10000);
   Threshold<std::mt19937, 8> quencher{problem, &quench_sequence};
 
-  auto random_permute = [&](Schedule &s) { s.permute(g); };
+  auto random_permute = [&](Schedule &s) {
+    std::uniform_int_distribution<> which(0, 1);
+    auto choice = which(g);
+    if (choice == 0) {
+      s.permute(g);
+    } else {
+      s.insert_permute(g);
+    }
+  };
   auto random_close_permute = [&](Schedule &s) { s.close_permute(g, 5); };
 
   double max_profit = 0;

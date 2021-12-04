@@ -54,7 +54,7 @@ public:
   template <typename RandomGen> void shuffle(RandomGen &g) {
     std::shuffle(selections_.begin(), selections_.end(), g);
   }
-  // Mutates the schedule to a random neighbor.
+  // Mutates the schedule to a random neighbor by swapping two tasks.
   template <typename RandomGen> void permute(RandomGen &g) {
     auto last_task = completed_tasks_size() - 1;
     std::uniform_int_distribution<> first_dist(0, last_task);
@@ -65,7 +65,8 @@ public:
     swap_tasks(first, second);
   }
 
-  // Mutates the schedule to a random close neighbor.
+  // Mutates the schedule to a random close neighbor by swapping two close
+  // tasks.
   template <typename RandomGen> void close_permute(RandomGen &g, int distance) {
     auto last_task = completed_tasks_size() - 1;
     std::uniform_int_distribution<> first_dist(0, last_task);
@@ -74,6 +75,23 @@ public:
         std::max(0, first - distance), std::min(last_task, first + distance));
     auto second = second_dist(g);
     swap_tasks(first, second);
+  }
+
+  // Mutates the schedule to a random neighbor by inserting a task.
+  template <typename RandomGen> void insert_permute(RandomGen &g) {
+    auto last_task = completed_tasks_size() - 1;
+    std::uniform_int_distribution<> first_dist(0, last_task);
+    std::uniform_int_distribution<> second_dist(0,
+                                                problem_->tasks().size() - 1);
+    auto first = first_dist(g);
+    auto second = second_dist(g);
+    if (second < first) {
+      std::swap(first, second);
+    }
+    auto task = selections_[second];
+    selections_.erase(selections_.begin() + second,
+                      selections_.begin() + second + 1);
+    selections_.insert(selections_.begin() + first, task);
   }
 
 private:
