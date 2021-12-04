@@ -1,1 +1,3 @@
 Run `bazel run @hedron_compile_commands//:refresh_all` to refresh compile commands.
+
+small-77 solved by hand.
