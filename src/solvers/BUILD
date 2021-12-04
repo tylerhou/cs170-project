@@ -16,6 +16,22 @@ cc_library(
 )
 
 cc_binary(
+    name = "threshold_solve2",
+    srcs = [
+        "threshold_solve2.cc",
+    ],
+    deps = [
+        ":sequence",
+        ":threshold",
+        "//src:parse",
+        "//src:problem",
+        "//src:schedule",
+        "@com_github_google_glog//:glog",
+        "@com_github_gflags_gflags//:gflags",
+    ],
+)
+
+cc_binary(
     name = "threshold_solve",
     srcs = [
         "threshold_solve.cc",
@@ -27,6 +43,7 @@ cc_binary(
         "//src:problem",
         "//src:schedule",
         "@com_github_google_glog//:glog",
+        "@com_github_gflags_gflags//:gflags",
     ],
 )
 

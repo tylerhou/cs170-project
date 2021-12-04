@@ -9,28 +9,19 @@
 #include "src/problem.h"
 #include "src/schedule.h"
 
+template <typename RandomGen, int Rounds>
 class Threshold {
 public:
-  Threshold() = default;
-  virtual ~Threshold() = default;
+  Threshold(const Problem &problem, const Sequence *threshold_sequence)
+      : problem_(problem), threshold_sequence_(threshold_sequence) {}
 
-  virtual Schedule Run(Schedule start) = 0;
-};
-
-template <typename RandomGen, int Rounds>
-class ThresholdImpl : public Threshold {
-public:
-  ThresholdImpl(const Problem &problem, const Sequence *threshold_sequence,
-                RandomGen &random)
-      : problem_(problem), threshold_sequence_(threshold_sequence),
-        random_(random) {}
-
-  Schedule Run(Schedule start) {
+  template <typename F>
+  Schedule Run(Schedule start, F permute) {
     for (const auto threshold : *threshold_sequence_) {
       DCHECK(threshold >= 0) << "Cannot use negative threshold " << threshold;
       for (int i = 0; i < Rounds; ++i) {
         Schedule neighbor = start;
-        neighbor.permute(random_);
+        permute(neighbor);
         const double improvement =
             neighbor.selected_profit() - start.selected_profit();
         DVLOG(2) << "Neighbor has improvment " << improvement;
@@ -48,7 +39,6 @@ public:
 private:
   const Problem &problem_;
   const Sequence *threshold_sequence_;
-  RandomGen &random_;
 };
 
 #endif

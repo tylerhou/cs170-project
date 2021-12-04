@@ -35,7 +35,9 @@ public:
   // Linear time is fine as we must make a copy to compute the neightbor cost.
   double selected_profit() const;
 
-  std::vector<int>::const_iterator begin() const { return selections().begin(); };
+  std::vector<int>::const_iterator begin() const {
+    return selections().begin();
+  };
   std::vector<int>::const_iterator end() const { return selections().end(); };
   // Returns an iterator into selections that points to the first uncompleted
   // (i.e. the first task that ends after the deadline).  If we complete all
@@ -54,9 +56,22 @@ public:
   }
   // Mutates the schedule to a random neighbor.
   template <typename RandomGen> void permute(RandomGen &g) {
-    std::uniform_int_distribution<> first_dist(0, completed_tasks_size() - 1),
-        second_dist(0, problem_->tasks().size() - 1);
+    auto last_task = completed_tasks_size() - 1;
+    std::uniform_int_distribution<> first_dist(0, last_task);
+    std::uniform_int_distribution<> second_dist(0,
+                                                problem_->tasks().size() - 1);
     auto first = first_dist(g);
+    auto second = second_dist(g);
+    swap_tasks(first, second);
+  }
+
+  // Mutates the schedule to a random close neighbor.
+  template <typename RandomGen> void close_permute(RandomGen &g, int distance) {
+    auto last_task = completed_tasks_size() - 1;
+    std::uniform_int_distribution<> first_dist(0, last_task);
+    auto first = first_dist(g);
+    std::uniform_int_distribution<> second_dist(
+        std::max(0, first - distance), std::min(last_task, first + distance));
     auto second = second_dist(g);
     swap_tasks(first, second);
   }
