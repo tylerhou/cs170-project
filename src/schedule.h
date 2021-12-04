@@ -84,13 +84,15 @@ public:
     std::uniform_int_distribution<> second_dist(0,
                                                 problem_->tasks().size() - 1);
     auto first = first_dist(g);
-    auto second = second_dist(g);
+    int second = -1;
+    while (second != first) {
+        second = second_dist(g);
+    }
     if (second < first) {
       std::swap(first, second);
     }
     auto task = selections_[second];
-    selections_.erase(selections_.begin() + second,
-                      selections_.begin() + second + 1);
+    selections_.erase(selections_.begin() + second);
     selections_.insert(selections_.begin() + first, task);
   }
 
