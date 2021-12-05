@@ -16,7 +16,7 @@
 #include "src/solvers/sequence.h"
 #include "src/solvers/threshold.h"
 
-constexpr auto kIterations = 10;
+constexpr auto kIterations = 300;
 constexpr auto kSampleSequenceSize = 1000 * 1000;
 
 Schedule greedy_solve(const Problem &problem) {
@@ -46,9 +46,6 @@ Schedule greedy_solve(const Problem &problem) {
   }
   Schedule schedule{problem};
   schedule.set_selections(selections);
-  for (auto s : selections) {
-    LOG(INFO) << s;
-  }
   return schedule;
 }
 
@@ -137,9 +134,6 @@ int main(int argc, char *argv[]) {
   auto tasks = greedy_profit.problem().tasks();
   std::sort(selections.begin(), selections.end(), [&](int f, int s) {
     auto tf = tasks[f], ts = tasks[s];
-    LOG(INFO) << f << " " << tf.profit << " " << tf.deadline << " " << s << " "
-              << ts.profit << " " << ts.deadline;
-    LOG(INFO) << (tf.profit > ts.profit && tf.deadline < ts.deadline);
     if (tf.profit == ts.profit) {
       return tf.deadline < ts.deadline;
     }
