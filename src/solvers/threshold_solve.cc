@@ -70,16 +70,16 @@ int main(int argc, char *argv[]) {
             << (end - start) / std::chrono::seconds(1) << " seconds";
   Threshold<std::mt19937, 1> solver{problem, &sequence};
 
-  ConstantSequence quench_sequence(/*constant=*/0, /*size=*/10000);
+  ConstantSequence quench_sequence(/*constant=*/0, /*size=*/100 * 1000);
   Threshold<std::mt19937, 8> quencher{problem, &quench_sequence};
 
   auto random_permute = [&](Schedule &s) {
-    std::uniform_int_distribution<> which(0, 1);
+    std::uniform_int_distribution<> which(0, 4);
     auto choice = which(g);
     if (choice == 0) {
-      s.permute(g);
-    } else {
       s.insert_permute(g);
+    } else {
+      s.permute(g);
     }
   };
   auto random_close_permute = [&](Schedule &s) { s.close_permute(g, 5); };
