@@ -37,6 +37,11 @@ folders, taking the best solution from each folder.
 Use `python3 tools/score.py inputs outputs...` to generate a list of the best
 solutions and the folders that they came from.
 
+## Updating tosolve
+
+Copy the query inside query.js and paste it into the developer console on the
+leaderboard page.
+
 ## Language Server
 
 Run `bazel run @hedron_compile_commands//:refresh_all` to generate a list of
